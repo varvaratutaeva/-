@@ -49,6 +49,18 @@ def send_password(message):
 GROUP_CHAT_ID = int(os.environ["GROUP_CHAT_ID"])
 def is_api_group(chat_id):
     return chat_id == GROUP_CHAT_ID
+
+@bot.message_handler(commands=['info', 'help'])
+def on_info(message):
+    if not is_api_group(message.chat.id):
+        bot.reply_to(message, text_messages['wrong_chat'])
+        return
+
+    bot.reply_to(message, text_messages['info'])
+
+@bot.message_handler(commands=["ping"])
+def on_ping(message):
+    bot.reply_to(message, "Still alive and kicking!")
 @bot.message_handler(func=lambda m: True, content_types=['new_chat_participant'])
 def on_user_joins(message):
     if not is_api_group(message.chat.id):
